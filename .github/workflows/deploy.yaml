@@ -39,7 +39,17 @@ jobs:
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             --cache-from ${{ env.IMAGE_NAME }}:latest \
             --platform ${{ env.PLATFORMS }} \
+            --target base \
             --push \
             --tag ${{ env.IMAGE_NAME }}:$VERSION \
             --tag ${{ env.IMAGE_NAME }}:latest \
+            .
+          docker buildx build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --cache-from ${{ env.IMAGE_NAME }}:latest \
+            --platform ${{ env.PLATFORMS }} \
+            --target debug \
+            --push \
+            --tag ${{ env.IMAGE_NAME }}:$VERSION-debug \
+            --tag ${{ env.IMAGE_NAME }}:debug \
             .
