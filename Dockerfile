@@ -24,3 +24,10 @@ RUN curl -f -L "https://github.com/helmfile/helmfile/releases/download/v${HELMFI
 RUN kubectl version --client=true --output=yaml \
 	&& helm version \
 	&& helmfile --version
+
+RUN adduser \
+	--disabled-password \
+	--gecos "" \
+	app
+
+USER app

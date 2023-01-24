@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: 'zerosuxx/k0d'
+  IMAGE_NAME: 'zerok8s/k0d'
   PLATFORMS: 'linux/amd64,linux/arm64'
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
