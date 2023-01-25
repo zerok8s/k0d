@@ -1,5 +1,7 @@
 # k0d (kubernetes tools in docker)
 
+[![.github/workflows/deploy.yaml](https://github.com/zerok8s/k0d/actions/workflows/deploy.yaml/badge.svg)](https://github.com/zerok8s/k0d/actions/workflows/deploy.yaml)
+
 ## Available tools
 - kubectl
 - helm

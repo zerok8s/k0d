@@ -35,7 +35,7 @@ jobs:
           password: ${{ env.DOCKERHUB_TOKEN }}
 
       - name: Build and deploy docker image
-        if: !startsWith(github.ref, 'refs/tags')
+        if: ! startsWith(github.ref, 'refs/tags')
         run: |
           export KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -c2-)
           export HELM_VERSION=$(curl -s https://scripts.zer0.hu/lv | sh -s helm/helm | cut -c2-)
