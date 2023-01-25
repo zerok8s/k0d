@@ -39,7 +39,7 @@ RUN curl -f "https://get.helm.sh/helm-v${HELM_VERSION}-linux-`cat /arch`.tar.gz"
 RUN curl -f -L "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_`cat /arch`.tar.gz" | tar xzfO - -- helmfile > ./bin/helmfile \
 	&& chmod +x ./bin/helmfile
 
-RUN curl -f -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_cat /arch" -o ./bin/yq \
+RUN curl -f -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_`cat /arch`" -o ./bin/yq \
 	&& chmod +x ./bin/yq
 
 RUN kubectl version --client=true --output=yaml \
