@@ -34,15 +34,8 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and deploy docker image with tag
-        if: startsWith(github.ref, 'refs/tags')
-        run: |
-          export VERSION=$(git describe --tags 2>/dev/null || echo '0.1.0')
-          echo ${VERSION}
-          make build-and-push TAG=${VERSION} TARGET=base
-          make build-and-push TAG=${VERSION}-debug TARGET=debug
-
       - name: Build and deploy docker image
+        if: !startsWith(github.ref, 'refs/tags')
         run: |
           export KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -c2-)
           export HELM_VERSION=$(curl -s https://scripts.zer0.hu/lv | sh -s helm/helm | cut -c2-)
@@ -51,4 +44,12 @@ jobs:
           export EXTRA_ARGS='--build-arg="KUBECTL_VERSION=${KUBECTL_VERSION}" --build-arg="HELM_VERSION=${HELM_VERSION}" --build-arg="HELMFILE_VERSION=${HELMFILE_VERSION}" --build-arg="K9S_VERSION=${K9S_VERSION}"'
           make build-and-push TAG=latest TARGET=base 
           make build-and-push TAG=debug TARGET=debug
+
+      - name: Build and deploy docker image with tag
+        if: startsWith(github.ref, 'refs/tags')
+        run: |
+          export VERSION=$(git describe --tags 2>/dev/null || echo '0.1.0')
+          echo ${VERSION}
+          make build-and-push TAG=${VERSION} TARGET=base
+          make build-and-push TAG=${VERSION}-debug TARGET=debug
         
