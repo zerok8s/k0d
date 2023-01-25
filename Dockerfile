@@ -45,6 +45,8 @@ RUN kubectl version --client=true --output=yaml \
 	&& helmfile --version \
 	&& yq --version
 
+WORKDIR ${HOME}
+
 
 FROM base AS debug
 
