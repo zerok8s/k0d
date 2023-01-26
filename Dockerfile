@@ -33,7 +33,8 @@ RUN curl -f -L "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/`cat /ar
 
 RUN curl -f "https://get.helm.sh/helm-v${HELM_VERSION}-linux-`cat /arch`.tar.gz" | tar xzfO - -- "linux-`cat /arch`/helm" > /usr/local/bin/helm \
 	&& chmod +x /usr/local/bin/helm \
-	&& helm plugin install https://github.com/databus23/helm-diff
+	&& helm plugin install https://github.com/databus23/helm-diff \
+        && helm plugin install https://github.com/aslafy-z/helm-git.git
 
 RUN curl -f -L "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_`cat /arch`.tar.gz" | tar xzfO - -- helmfile > /usr/local/bin/helmfile \
 	&& chmod +x /usr/local/bin/helmfile
@@ -50,7 +51,7 @@ WORKDIR ${HOME}
 
 FROM base AS debug
 
-ARG K9S_VERSION=0.26.7
+ARG K9S_VERSION=0.27.0
 
 RUN [[ `arch` == 'x86_64' ]] && normalizedArch="x86_64" || normalizedArch="arm64" \
 	&& curl -f -L "https://github.com/derailed/k9s/releases/download/v${K9S_VERSION}/k9s_Linux_${normalizedArch}.tar.gz" | tar xzfO - -- k9s > /usr/local/bin/k9s \
