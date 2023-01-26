@@ -53,8 +53,7 @@ FROM base AS debug
 
 ARG K9S_VERSION=0.27.0
 
-RUN [[ `arch` == 'x86_64' ]] && normalizedArch="x86_64" || normalizedArch="arm64" \
-	&& curl -f -L "https://github.com/derailed/k9s/releases/download/v${K9S_VERSION}/k9s_Linux_${normalizedArch}.tar.gz" | tar xzfO - -- k9s > /usr/local/bin/k9s \
+RUN curl -f -L "https://github.com/derailed/k9s/releases/download/v${K9S_VERSION}/k9s_Linux_`cat /arch`.tar.gz" | tar xzfO - -- k9s > /usr/local/bin/k9s \
 	&& chmod +x /usr/local/bin/k9s
 
 RUN k9s version
