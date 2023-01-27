@@ -20,6 +20,8 @@ RUN apk add --no-cache \
 	git \
 	nano \
 	jq \
+	gettext \
+    	iproute2 \
 	dumb-init \
     && rm -rf /tmp/* /var/cache/apk/*
 
