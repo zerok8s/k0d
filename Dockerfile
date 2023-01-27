@@ -21,7 +21,7 @@ RUN apk add --no-cache \
 	nano \
 	jq \
 	gettext \
-    	iproute2 \
+	iproute2 \
 	dumb-init \
     && rm -rf /tmp/* /var/cache/apk/*
 
