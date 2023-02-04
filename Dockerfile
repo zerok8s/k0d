@@ -28,8 +28,11 @@ RUN curl -f -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linu
 RUN curl -f -L "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/`cat /arch`/kubectl" -o /usr/local/bin/kubectl \
 	&& chmod +x /usr/local/bin/kubectl
 
+COPY --chmod=0755 ./bin/k0d /usr/local/bin/
+
 RUN kubectl version --client=true --output=yaml \
-	&& yq --version
+	&& yq --version \
+	&& k0d version
 
 
 FROM base AS full

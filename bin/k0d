@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+action="$1"
+version="1.0.0"
+
+: ${CLUSTER_NAME:="k8s"}
+
+case "${action}" in
+  login)
+    kubectl config set-cluster "${CLUSTER_NAME}" --server="${KUBE_API_URL}" --certificate-authority="${KUBE_API_CERT_FILE}" --embed-certs=true
+    kubectl config set-credentials "${CLUSTER_NAME}-user" --token="${KUBE_API_TOKEN}"
+    kubectl config set-context "${CLUSTER_NAME}" --cluster "${CLUSTER_NAME}" --user "${CLUSTER_NAME}-user"
+    kubectl config use-context "${CLUSTER_NAME}"
+    ;;
+
+  logout)
+    kubectl config delete-context "${CLUSTER_NAME}"
+    kubectl config delete-user "${CLUSTER_NAME}-user"
+    kubectl config delete-cluster "${CLUSTER_NAME}"
+    ;;
+
+  version)
+    echo "${version}"
+    ;;
+
+  *)
+    echo "Usage: $0 login|logout"
+    echo "Version: ${version}"
+
+    exit 1
+    ;;
+esac
