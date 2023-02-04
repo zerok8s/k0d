@@ -19,12 +19,17 @@ case "${action}" in
     kubectl config delete-cluster "${CLUSTER_NAME}"
     ;;
 
+  help)
+    echo "$0 login, envs: KUBE_API_URL, KUBE_API_CERT_FILE, KUBE_API_TOKEN, [CLUSTER_NAME]"
+    echo "$0 logout, envs: [CLUSTER_NAME]"
+    ;;
+
   version)
     echo "${version}"
     ;;
 
   *)
-    echo "Usage: $0 login|logout"
+    echo "Usage: $0 help"
     echo "Version: ${version}"
 
     exit 1
