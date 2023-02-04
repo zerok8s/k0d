@@ -2,7 +2,7 @@ name: CI
 
 on:
   schedule:
-    - cron: '0 11 * * *'
+    - cron: '20 10 * * *'
   push:
     branches:
       - main
@@ -34,19 +34,26 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and deploy docker image
-        if: ! startsWith(github.ref, 'refs/tags')
+      - name: Build and deploy latest images
+        if: contains(github.ref, 'main')
+        run: |
+          make build-and-push TAG=base TARGET=base
+          make build-and-push TAG=latest TARGET=full
+          make build-and-push TAG=debug TARGET=debug
+
+      - name: Build and deploy nightly images
+        if: contains(github.ref, 'main')
         run: |
           export KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -c2-)
           export HELM_VERSION=$(curl -s https://scripts.zer0.hu/lv | sh -s helm/helm | cut -c2-)
           export HELMFILE_VERSION=$(curl -s https://scripts.zer0.hu/lv | sh -s helmfile/helmfile | cut -c2-)
           export K9S_VERSION=$(curl -s https://scripts.zer0.hu/lv | sh -s derailed/k9s | cut -c2-)
           export EXTRA_ARGS='--build-arg="KUBECTL_VERSION=${KUBECTL_VERSION}" --build-arg="HELM_VERSION=${HELM_VERSION}" --build-arg="HELMFILE_VERSION=${HELMFILE_VERSION}" --build-arg="K9S_VERSION=${K9S_VERSION}"'
-          make build-and-push TAG=base TARGET=base
-          make build-and-push TAG=latest TARGET=full
-          make build-and-push TAG=debug TARGET=debug
+          make build-and-push TAG=nightly-base TARGET=base
+          make build-and-push TAG=nightly TARGET=full
+          make build-and-push TAG=nightly-debug TARGET=debug
 
-      - name: Build and deploy docker image with tag
+      - name: Build and deploy version tagged images
         if: startsWith(github.ref, 'refs/tags')
         run: |
           export VERSION=$(git describe --tags 2>/dev/null || echo '0.1.0')
@@ -54,4 +61,3 @@ jobs:
           make build-and-push TAG=${VERSION}-base TARGET=base
           make build-and-push TAG=${VERSION} TARGET=full
           make build-and-push TAG=${VERSION}-debug TARGET=debug
-        

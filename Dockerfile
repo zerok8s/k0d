@@ -1,7 +1,5 @@
 FROM alpine AS base
 
-ARG KUBECTL_VERSION=1.26.1
-
 RUN apk add --no-cache \
 	curl \
 	bash \
@@ -9,9 +7,12 @@ RUN apk add --no-cache \
 	git \
 	nano \
 	jq \
+	gettext \
+	iproute2 \
 	dumb-init \
     && rm -rf /tmp/* /var/cache/apk/*
 
+ARG KUBECTL_VERSION=1.26.1
 ARG HOME="/k0d"
 ENV HOME="${HOME}"
 
@@ -45,7 +46,8 @@ ENV HELM_DATA_HOME="${HELM_DATA_HOME}"
 
 RUN curl -f "https://get.helm.sh/helm-v${HELM_VERSION}-linux-`cat /arch`.tar.gz" | tar xzfO - -- "linux-`cat /arch`/helm" > /usr/local/bin/helm \
 	&& chmod +x /usr/local/bin/helm \
-	&& helm plugin install https://github.com/databus23/helm-diff
+	&& helm plugin install https://github.com/databus23/helm-diff \
+    && helm plugin install https://github.com/aslafy-z/helm-git.git
 
 RUN curl -f -L "https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_`cat /arch`.tar.gz" | tar xzfO - -- helmfile > /usr/local/bin/helmfile \
 	&& chmod +x /usr/local/bin/helmfile
@@ -54,7 +56,7 @@ RUN helm version \
 	&& helmfile --version
 
 
-FROM base AS debug
+FROM full AS debug
 
 ARG K9S_VERSION=0.27.2
 
