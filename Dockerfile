@@ -10,6 +10,7 @@ RUN apk add --no-cache \
 	gettext \
 	iproute2 \
 	dumb-init \
+	openssh-client \
     && rm -rf /tmp/* /var/cache/apk/*
 
 ARG KUBECTL_VERSION=1.26.1
