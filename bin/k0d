@@ -27,7 +27,7 @@ case "${action}" in
   help)
     echo "$0 login, envs: KUBE_API_URL, KUBE_API_CERT_FILE, KUBE_API_TOKEN, [CLUSTER_NAME]"
     echo "$0 logout, envs: [CLUSTER_NAME]"
-    echo "$0 print-gitlab-ci-config"
+    echo "$0 print-gitlab-ci-config, envs: [ENV_*]"
     ;;
 
   version)
