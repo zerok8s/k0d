@@ -32,10 +32,19 @@ case "${action}" in
       -o yaml
     ;;
 
+  get-secret-copy)
+    secret_name="$2"
+    secret_namespace="$3"
+
+    kubectl get secret "${secret_name}" -n "${secret_namespace}" -o yaml | \
+      yq 'del(.metadata.creationTimestamp, .metadata.uid, .metadata.resourceVersion, .metadata.namespace, .metadata.annotations."kubectl.kubernetes.io/last-applied-configuration")'
+    ;;    
+
   help)
     echo "$0 login, envs: KUBE_API_URL, KUBE_API_CERT_FILE, KUBE_API_TOKEN, [CLUSTER_NAME]"
     echo "$0 logout, envs: [CLUSTER_NAME]"
     echo "$0 generate-secret-manifest, envs: APP_NAME, \${APP_NAME}_ENV_FILE"
+    echo "$0 get-secret-copy SECRET_NAME [SECRET_NAMESPACE]"
     ;;
 
   version)
