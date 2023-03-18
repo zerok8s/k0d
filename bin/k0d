@@ -22,11 +22,13 @@ case "${action}" in
     ;;
 
   generate-secret-manifest)
-    env_file_name="$(echo "${APP_NAME}_ENV_FILE" | tr '-' '_' | tr '[:lower:]' '[:upper:]')"
+    app_name="$2"
+    secret_file_name="$3"
+    env_file_name="$(echo "${secret_file_name}" | tr '-' '_' | tr '[:lower:]' '[:upper:]')"
     
     [[ ! -f "${!env_file_name}" ]] && echo "⚠️  '${!env_file_name}' ('${env_file_name}') doesn't exists" 1>&2 && exit 1
     
-    kubectl create secret generic "${APP_NAME}-secret" \
+    kubectl create secret generic "${app_name}-secret" \
       --from-env-file="${!env_file_name}" \
       --dry-run=client \
       -o yaml
