@@ -29,6 +29,15 @@ RUN curl -f -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linu
 RUN curl -f -L "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/`cat /arch`/kubectl" -o /usr/local/bin/kubectl \
 	&& chmod +x /usr/local/bin/kubectl
 
+RUN curl -f -L "https://scripts.zer0.hu/ci_deploy/generate-gitlab-ci-yml" -o /usr/local/bin/generate-gitlab-ci-yml \
+	&& chmod +x /usr/local/bin/generate-gitlab-ci-yml 
+
+RUN curl -f -L "https://scripts.zer0.hu/ci_deploy/generate-k8s-manifests" -o /usr/local/bin/generate-k8s-manifests \
+	&& chmod +x /usr/local/bin/generate-k8s-manifests
+
+RUN curl -f -L "https://scripts.zer0.hu/ci_deploy/git" -o /usr/local/bin/ci-git \
+	&& chmod +x /usr/local/bin/ci-git
+
 COPY --chmod=0755 ./bin/* /usr/local/bin/
 
 RUN kubectl version --client=true --output=yaml \
