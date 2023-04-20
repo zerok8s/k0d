@@ -10,9 +10,11 @@
 - kubectl
 - helm
 - helmfile
+- k9s
 
 ## Usage
 ```shell
+$ docker build -t zerosuxx/k0d:debug .
 $ docker run --rm -it --net=host -v ~/.kube/config:/k0d/.kube/config zerosuxx/k0d:latest kubectl get pods
 $ docker run --rm -it -v ~/.kube/config:/k0d/.kube/config zerosuxx/k0d:debug k9s
 ```

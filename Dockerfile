@@ -1,17 +1,4 @@
-FROM alpine AS base
-
-RUN apk add --no-cache \
-	curl \
-	bash \
-	openssl \
-	git \
-	nano \
-	jq \
-	gettext \
-	iproute2 \
-	dumb-init \
-	openssh-client \
-    && rm -rf /tmp/* /var/cache/apk/*
+FROM zerosuxx/alpine AS base
 
 ARG KUBECTL_VERSION=1.26.1
 ARG HOME="/k0d"
@@ -20,11 +7,6 @@ ENV HOME="${HOME}"
 WORKDIR ${HOME}
 
 RUN chmod 751 ${HOME}
-
-RUN ([[ `arch` == 'x86_64' ]] && echo "amd64" || echo "arm64") > /arch
-
-RUN curl -f -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_`cat /arch`" -o /usr/local/bin/yq \
-	&& chmod +x /usr/local/bin/yq
 
 RUN curl -f -L "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/`cat /arch`/kubectl" -o /usr/local/bin/kubectl \
 	&& chmod +x /usr/local/bin/kubectl
